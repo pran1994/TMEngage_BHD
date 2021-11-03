@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="Success Archive"
+  DTS:DTSID="{26A5335B-6850-48E5-B366-17EF44F00B31}"
+  DTS:CreationName="FILE">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::SuccessLocation] + "Archive"</DTS:PropertyExpression>
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:FileUsageType="2"
+      DTS:ConnectionString="D:\BulkV2Files\AFL\LoadFiles\Success\Archive" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

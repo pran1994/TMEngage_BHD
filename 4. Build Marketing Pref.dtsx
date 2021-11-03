@@ -1,0 +1,395 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/29/2021 9:14:36 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="CRMSTG01"
+  DTS:CreatorName="AFL\terry.pino"
+  DTS:DTSID="{B9AB2C18-CDEF-4497-8EDB-72A25C6E30D4}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.167"
+  DTS:LocaleID="3081"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="10"
+  DTS:VersionGUID="{79FFBF27-0513-45BD-AC5D-226964017D0C}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{72E4F7B3-0199-45ED-B29E-55B80E952C46}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="MarketingPrefFlag">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{A5EB9808-65B5-4617-9FF6-E592A079E3B8}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="objSubs">
+      <DTS:VariableValue
+        DTS:DataSubType="ManagedSerializable"
+        DTS:DataType="13">
+        <SOAP-ENV:Envelope xmlns:clr="http://schemas.microsoft.com/soap/encoding/clr/1.0" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+          <SOAP-ENV:Body>
+            <xsd:anyType
+              id="ref-1"></xsd:anyType>
+          </SOAP-ENV:Body>
+        </SOAP-ENV:Envelope>
+      </DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{8FE2B0CC-75A0-48DE-8E2A-48BAC8E5D9D4}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="SubscriptionId">
+      <DTS:VariableValue
+        DTS:DataType="8"
+        xml:space="preserve"></DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create TM Marketing Pref Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{30d9c789-8e63-4627-9bf6-0dc964798a77}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create TM Marketing Pref Table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+          SQLTask:SqlStatementSource="Declare @SQLstr nvarchar(max)&#xA;&#xA;set @SQLstr = 'drop table if exists CRMArchtics.TMEngageMarketingPrefs;create table CRMArchtics.TMEngageMarketingPrefs (Id nvarchar(18) null, Contact__c nvarchar(18) null,Arcthics_contact_id__c nvarchar(255) null,'&#xA;select @SQLstr = @SQLstr + STRING_AGG(marketingprefflag,' nvarchar(20) null,') + ' nvarchar(255) null)'&#xA;from TMEngage.Subscriptions&#xA;--print @SQLstr&#xA;exec(@SQLstr)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Populate TM Engage Pref table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{E78C2FC4-5530-40AC-B700-4A5FB85250A0}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Populate TM Engage Pref table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+          SQLTask:SqlStatementSource="insert CRMArchtics.TMEngageMarketingPrefs(id,Contact__c,Arcthics_contact_id__c)&#xA;select id,Contact__c,Archtics_contact_id__c from TMEngage.SFMarketingPrefs" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Sequence Container"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{23130392-4E59-4B47-B544-6816A330074D}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Sequence Container">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Sequence Container\Foreach Loop Container"
+          DTS:CreationName="STOCK:FOREACHLOOP"
+          DTS:Description="Foreach Loop Container"
+          DTS:DTSID="{38A90665-7DEC-4674-BBC3-60F2CC87E4DF}"
+          DTS:ExecutableType="STOCK:FOREACHLOOP"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Foreach Loop Container">
+          <DTS:ForEachEnumerator
+            DTS:CreationName="Microsoft.ForEachADOEnumerator"
+            DTS:DTSID="{6839A55D-302C-44DF-AA49-0228A25C0292}"
+            DTS:ObjectName="{6839A55D-302C-44DF-AA49-0228A25C0292}">
+            <DTS:ObjectData>
+              <FEEADO
+                EnumType="EnumerateRowsInFirstTable"
+                VarName="User::objSubs" />
+            </DTS:ObjectData>
+          </DTS:ForEachEnumerator>
+          <DTS:Variables />
+          <DTS:Executables>
+            <DTS:Executable
+              DTS:refId="Package\Sequence Container\Foreach Loop Container\Update Table - Cust Id Link"
+              DTS:CreationName="Microsoft.ExecuteSQLTask"
+              DTS:Description="Execute SQL Task"
+              DTS:DTSID="{1AB2C97A-42DB-42ED-99D3-38ED43D7B938}"
+              DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+              DTS:LocaleID="-1"
+              DTS:ObjectName="Update Table - Cust Id Link"
+              DTS:ThreadHint="0">
+              <DTS:Variables />
+              <DTS:ObjectData>
+                <SQLTask:SqlTaskData
+                  SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+                  SQLTask:SqlStatementSource="Declare @SQLStr nvarchar(4000)&#xA;&#xA;Select @SQLStr = N'update m set ' + ? + '= ''True'' from CRMArchtics.TMEngageMarketingPrefs m inner join TMEngage.SubscriptionData d on  d.cust_name_id = m.Arcthics_contact_id__c where [Opted Out Date] is null and SubscriptionId =' + ?&#xA;--print @SQLStr&#xA;exec (@SQLStr)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+                  <SQLTask:ParameterBinding
+                    SQLTask:ParameterName="0"
+                    SQLTask:DtsVariableName="User::MarketingPrefFlag"
+                    SQLTask:ParameterDirection="Input"
+                    SQLTask:DataType="130"
+                    SQLTask:ParameterSize="-1" />
+                  <SQLTask:ParameterBinding
+                    SQLTask:ParameterName="1"
+                    SQLTask:DtsVariableName="User::SubscriptionId"
+                    SQLTask:ParameterDirection="Input"
+                    SQLTask:DataType="130"
+                    SQLTask:ParameterSize="-1" />
+                </SQLTask:SqlTaskData>
+              </DTS:ObjectData>
+            </DTS:Executable>
+            <DTS:Executable
+              DTS:refId="Package\Sequence Container\Foreach Loop Container\Update Table - Email Link"
+              DTS:CreationName="Microsoft.ExecuteSQLTask"
+              DTS:Description="Execute SQL Task"
+              DTS:DTSID="{da5be72b-957c-47f0-bffe-505cb0bb5ad8}"
+              DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+              DTS:LocaleID="-1"
+              DTS:ObjectName="Update Table - Email Link"
+              DTS:ThreadHint="0">
+              <DTS:Variables />
+              <DTS:ObjectData>
+                <SQLTask:SqlTaskData
+                  SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+                  SQLTask:SqlStatementSource="Declare @SQLStr nvarchar(4000)&#xA;&#xA;Select @SQLStr = N'update m set ' + ? + '= ''True'' from TMEngage.SubscriptionData s inner join CRMArchtics.Contact c on  c.Email = s.Email inner join CRMArchtics.TMEngageMarketingPrefs m on c.Id = m.Contact__c where isnull(s.cust_name_id,'''') = '''' and SubscriptionId =' + ?&#xA;--print @SQLStr&#xA;exec (@SQLStr)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+                  <SQLTask:ParameterBinding
+                    SQLTask:ParameterName="0"
+                    SQLTask:DtsVariableName="User::MarketingPrefFlag"
+                    SQLTask:ParameterDirection="Input"
+                    SQLTask:DataType="130"
+                    SQLTask:ParameterSize="-1" />
+                  <SQLTask:ParameterBinding
+                    SQLTask:ParameterName="1"
+                    SQLTask:DtsVariableName="User::SubscriptionId"
+                    SQLTask:ParameterDirection="Input"
+                    SQLTask:DataType="130"
+                    SQLTask:ParameterSize="-1" />
+                </SQLTask:SqlTaskData>
+              </DTS:ObjectData>
+            </DTS:Executable>
+          </DTS:Executables>
+          <DTS:PrecedenceConstraints>
+            <DTS:PrecedenceConstraint
+              DTS:refId="Package\Sequence Container\Foreach Loop Container.PrecedenceConstraints[Constraint]"
+              DTS:CreationName=""
+              DTS:DTSID="{7223EC1F-B656-4982-84FC-E6465EEDE4B2}"
+              DTS:From="Package\Sequence Container\Foreach Loop Container\Update Table - Cust Id Link"
+              DTS:LogicalAnd="True"
+              DTS:ObjectName="Constraint"
+              DTS:To="Package\Sequence Container\Foreach Loop Container\Update Table - Email Link" />
+          </DTS:PrecedenceConstraints>
+          <DTS:ForEachVariableMappings>
+            <DTS:ForEachVariableMapping
+              DTS:CreationName=""
+              DTS:DTSID="{8FFC9F33-38B8-4C4C-A40E-1091C432A924}"
+              DTS:ObjectName="{8FFC9F33-38B8-4C4C-A40E-1091C432A924}"
+              DTS:ValueIndex="0"
+              DTS:VariableName="User::MarketingPrefFlag" />
+            <DTS:ForEachVariableMapping
+              DTS:CreationName=""
+              DTS:DTSID="{54A5000A-2DF7-4AE3-BD40-75D0C48EA587}"
+              DTS:ObjectName="{54A5000A-2DF7-4AE3-BD40-75D0C48EA587}"
+              DTS:ValueIndex="1"
+              DTS:VariableName="User::SubscriptionId" />
+          </DTS:ForEachVariableMappings>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Sequence Container\Get Subs"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{A1B1D94E-BDA3-4AA1-AC67-362E4A852D59}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Get Subs"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+              SQLTask:SqlStatementSource="select MarketingPrefFlag,SubscriptionId&#xA;from TMEngage.Subscriptions"
+              SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ResultBinding
+                SQLTask:ResultName="0"
+                SQLTask:DtsVariableName="User::objSubs" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\Sequence Container.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{6F17B969-7F21-47C0-8C5F-7FEA5D507048}"
+          DTS:From="Package\Sequence Container\Get Subs"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\Sequence Container\Foreach Loop Container" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{50132B0C-8883-4C1B-81C8-3653C021A379}"
+      DTS:From="Package\Create TM Marketing Pref Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Populate TM Engage Pref table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{451E661B-8D3B-4678-9647-D0A450025624}"
+      DTS:From="Package\Populate TM Engage Pref table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Sequence Container" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="236,42"
+          Id="Package\Create TM Marketing Pref Table"
+          TopLeft="5.5,5.5" />
+        <NodeLayout
+          Size="232,42"
+          Id="Package\Populate TM Engage Pref table"
+          TopLeft="7.50000000000001,107.5" />
+        <NodeLayout
+          Size="212,42"
+          Id="Package\Sequence Container\Foreach Loop Container\Update Table - Cust Id Link"
+          TopLeft="5.50000000000001,5.5" />
+        <NodeLayout
+          Size="205,42"
+          Id="Package\Sequence Container\Foreach Loop Container\Update Table - Email Link"
+          TopLeft="9.00000000000001,107.5" />
+        <EdgeLayout
+          Id="Package\Sequence Container\Foreach Loop Container.PrecedenceConstraints[Constraint]"
+          TopLeft="111.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="223,205"
+          Size="223,248"
+          Id="Package\Sequence Container\Foreach Loop Container"
+          TopLeft="5.50000000000004,107.5" />
+        <NodeLayout
+          Size="125,42"
+          Id="Package\Sequence Container\Get Subs"
+          TopLeft="54.5,5.5" />
+        <EdgeLayout
+          Id="Package\Sequence Container.PrecedenceConstraints[Constraint 2]"
+          TopLeft="117,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="234,411"
+          Size="234,454"
+          Id="Package\Sequence Container"
+          TopLeft="6.50000000000006,209.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="123.5,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="123.5,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

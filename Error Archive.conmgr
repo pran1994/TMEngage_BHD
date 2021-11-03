@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<DTS:ConnectionManager xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:ObjectName="Error Archive"
+  DTS:DTSID="{8E6AC798-DF90-4BC9-AD1B-6CE8730993EF}"
+  DTS:CreationName="FILE">
+  <DTS:PropertyExpression
+    DTS:Name="ConnectionString">@[$Project::ErrorLocation] + "Archive"</DTS:PropertyExpression>
+  <DTS:ObjectData>
+    <DTS:ConnectionManager
+      DTS:FileUsageType="2"
+      DTS:ConnectionString="D:\BulkV2Files\AFL\LoadFiles\Errors\Archive" />
+  </DTS:ObjectData>
+</DTS:ConnectionManager>

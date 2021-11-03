@@ -1,0 +1,623 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/22/2021 10:53:41 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="CRMSTG01"
+  DTS:CreatorName="AFL\terry.pino"
+  DTS:DTSID="{A9DAA186-D822-4F46-9109-BCB69F4E3F2A}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.167"
+  DTS:LocaleID="3081"
+  DTS:ObjectName="Package1"
+  DTS:PackageType="5"
+  DTS:VersionBuild="3"
+  DTS:VersionGUID="{301F9E9C-0FA2-4952-8D5E-8FF4783680F8}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Create index"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{4D746EB7-B0B3-4EB1-9D8A-758F6B3E6F4A}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Create index"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+          SQLTask:SqlStatementSource="create index sf_archticscontactid on TMEngage.SFMarketingPrefs(archtics_contact_id__c) &#xA;create index sf_archticsemail on TMEngage.SFMarketingPrefs(email) " xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Drop index"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{5511EF65-0A11-43C7-840B-D236C8BF7367}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Drop index"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+          SQLTask:SqlStatementSource="drop index if exists sf_archticscontactid on TMEngage.SFMarketingPrefs&#xA;drop index if exists sf_archticsemail on TMEngage.SFMarketingPrefs" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Get Marketing Prefs"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{F960E2AD-9926-4BEA-913F-F0414CE836D9}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Get Marketing Prefs"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Get Marketing Prefs\Get Marketing Prefs"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="SalesForce.com Source;SentryOne; Task Factory © 2019 SQL Sentry, LLC; http://www.sentryone.com;support@sentryone.com"
+              description="Retrieves data from SalesForce.com objects"
+              name="Get Marketing Prefs"
+              usesDispositions="true"
+              version="11">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of rows returned in each batch from SalesForce.com"
+                  name="BatchSize">500</property>
+                <property
+                  dataType="System.String"
+                  description="The statement used to query data from SalesForce.com"
+                  expressionType="Notify"
+                  name="QueryStatement">select id,contact__r.id ,contact__r.archtics_contact_id__c, contact__r.email from marketing_preferences__c where contact__r.archtics_contact_id__c &lt;&gt; null</property>
+                <property
+                  dataType="System.String"
+                  description="The name of the SalesForce.com object"
+                  expressionType="Notify"
+                  name="SalesForceObjectName">Marketing_Preferences__c</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Include deleted records in source data"
+                  expressionType="Notify"
+                  name="IncludeDeleted">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Set to true if a custom query is being used"
+                  expressionType="Notify"
+                  name="UseQuery">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Set to true if the local dates should be converted to UTC before being used in a where statement"
+                  expressionType="Notify"
+                  name="ConvertDatesToUTC">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="The type of query to execute (Normal or Bulk Query)"
+                  expressionType="Notify"
+                  name="Query Mode"
+                  typeConverter="PW.TaskFactory.SalesForceSource.QueryMode">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="The format in which the dates will be outputted"
+                  expressionType="Notify"
+                  name="Output Date Timezone"
+                  typeConverter="PW.TaskFactory.SalesForceSource.OutputDateTimezone">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds of to wait between polling checks for job status"
+                  name="Bulk Query Polling Interval">2</property>
+                <property
+                  dataType="System.Int32"
+                  description="The concurrency mode for the bulk query job"
+                  expressionType="Notify"
+                  name="Bulk Query Concurrency Mode"
+                  typeConverter="PW.TaskFactory.SalesForceBulkJob.ConcurrencyModeEnum">1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Set to true if xml results in columns should be wrapped with a &lt;root&gt; element. This makes it easier to parse in the down flow."
+                  expressionType="Notify"
+                  name="Wrap Xml With Root Element">false</property>
+                <property
+                  dataType="System.Boolean"
+                  expressionType="Notify"
+                  name="DebugMode">false</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">PW.TaskFactory.SalesForceSource</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Marketing Prefs\Get Marketing Prefs.Connections[SALESFORCE]"
+                  connectionManagerID="{A21D4E41-7DFF-4308-A205-14C0359E9CBA}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[SF Connection]"
+                  description="Connection to the SalesForce.com account"
+                  name="SALESFORCE" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data]"
+                  name="SalesForce Data">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="SalesForce"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Id]"
+                      length="18"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Id]"
+                      name="Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Id]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="SalesForce"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Id]"
+                      length="18"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Id]"
+                      name="Contact__r.Id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Archtics_contact_id__c]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="SalesForce"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Archtics_contact_id__c]"
+                      length="8"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Archtics_contact_id__c]"
+                      name="Contact__r.Archtics_contact_id__c"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Email]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="SalesForce"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Email]"
+                      length="80"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Email]"
+                      name="Contact__r.Email"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Id]"
+                      dataType="wstr"
+                      length="18"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Id]"
+                      dataType="wstr"
+                      length="18"
+                      name="Contact__r.Id" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Archtics_contact_id__c]"
+                      dataType="wstr"
+                      length="8"
+                      name="Contact__r.Archtics_contact_id__c" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].ExternalColumns[Contact__r.Email]"
+                      dataType="wstr"
+                      length="80"
+                      name="Contact__r.Email" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output]"
+                  isErrorOut="true"
+                  name="SalesForce Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorDescription]"
+                      dataType="wstr"
+                      length="1024"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[ErrorDescription]"
+                      name="ErrorDescription" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Id]"
+                      dataType="wstr"
+                      length="18"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Id]"
+                      name="Id" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Id]"
+                      dataType="wstr"
+                      length="18"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Id]"
+                      name="Contact__r.Id" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Archtics_contact_id__c]"
+                      dataType="wstr"
+                      length="8"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Archtics_contact_id__c]"
+                      name="Contact__r.Archtics_contact_id__c" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Email]"
+                      dataType="wstr"
+                      length="80"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Error Output].Columns[Contact__r.Email]"
+                      name="Contact__r.Email" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Get Marketing Prefs\Put Marketing Prefs"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Put Marketing Prefs"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[TMEngage].[SFMarketingPrefs]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Get Marketing Prefs\Put Marketing Prefs.Connections[OleDbConnection]"
+                  connectionManagerID="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[DB Connection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].Columns[Id]"
+                      cachedDataType="wstr"
+                      cachedLength="18"
+                      cachedName="Id"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Id]"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Id]" />
+                    <inputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].Columns[Contact__r.Id]"
+                      cachedDataType="wstr"
+                      cachedLength="18"
+                      cachedName="Contact__r.Id"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Contact__c]"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Id]" />
+                    <inputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].Columns[Contact__r.Archtics_contact_id__c]"
+                      cachedDataType="wstr"
+                      cachedLength="8"
+                      cachedName="Contact__r.Archtics_contact_id__c"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Archtics_contact_id__c]"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Archtics_contact_id__c]" />
+                    <inputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].Columns[Contact__r.Email]"
+                      cachedDataType="wstr"
+                      cachedLength="80"
+                      cachedName="Contact__r.Email"
+                      externalMetadataColumnId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Email]"
+                      lineageId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data].Columns[Contact__r.Email]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Id]"
+                      dataType="wstr"
+                      length="18"
+                      name="Id" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Contact__c]"
+                      dataType="wstr"
+                      length="18"
+                      name="Contact__c" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Archtics_contact_id__c]"
+                      dataType="wstr"
+                      length="20"
+                      name="Archtics_contact_id__c" />
+                    <externalMetadataColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input].ExternalColumns[Email]"
+                      dataType="wstr"
+                      length="80"
+                      name="Email" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Get Marketing Prefs\Put Marketing Prefs.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Get Marketing Prefs\Put Marketing Prefs.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Get Marketing Prefs\Put Marketing Prefs.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Get Marketing Prefs\Put Marketing Prefs.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Get Marketing Prefs.Paths[SalesForce Data]"
+              endId="Package\Get Marketing Prefs\Put Marketing Prefs.Inputs[OLE DB Destination Input]"
+              name="SalesForce Data"
+              startId="Package\Get Marketing Prefs\Get Marketing Prefs.Outputs[SalesForce Data]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{10A0734A-6011-4A06-89B8-EDEBAE84D5B6}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate table"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{715FE6E8-AC38-4CE6-81BE-1A831FAA3F38}"
+          SQLTask:SqlStatementSource="truncate table TMEngage.SFMarketingPrefs" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{EF08F9C9-CF41-4842-A995-EC8358387572}"
+      DTS:From="Package\Truncate table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Drop index" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{DD8A8603-9234-472F-BA5D-8376F7C1056C}"
+      DTS:From="Package\Drop index"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Get Marketing Prefs" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
+      DTS:CreationName=""
+      DTS:DTSID="{E5D4FB6E-80E1-4A2B-8070-04582C95C189}"
+      DTS:From="Package\Get Marketing Prefs"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 2"
+      DTS:To="Package\Create index" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="149,42"
+          Id="Package\Truncate table"
+          TopLeft="19.5,5.5" />
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Get Marketing Prefs"
+          TopLeft="5.50000000000003,209.5" />
+        <NodeLayout
+          Size="132,42"
+          Id="Package\Drop index"
+          TopLeft="28,107.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="94,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="94,149.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="141,42"
+          Id="Package\Create index"
+          TopLeft="23.5,311.5" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="94,251.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Get Marketing Prefs">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="177,42"
+          Id="Package\Get Marketing Prefs\Get Marketing Prefs"
+          TopLeft="5.50000000000001,5.5" />
+        <NodeLayout
+          Size="175,42"
+          Id="Package\Get Marketing Prefs\Put Marketing Prefs"
+          TopLeft="6.50000000000001,107.5" />
+        <EdgeLayout
+          Id="Package\Get Marketing Prefs.Paths[SalesForce Data]"
+          TopLeft="94,47.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,60"
+              Start="0,0"
+              End="0,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Get Marketing Prefs\Put Marketing Prefs">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
